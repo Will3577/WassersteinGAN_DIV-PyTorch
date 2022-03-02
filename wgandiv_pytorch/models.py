@@ -355,7 +355,7 @@ class ReconstructionDecoderWoSkip(nn.Module):
         self.deconv3 = upSampleConv(nG * 2, nG * 2)
         self.conv7 = nn.Sequential(convBatch(nG * 2, nG * 1),
                                    convBatch(nG * 1, nG * 1))
-        self.unetfinal = nn.Conv2d(nG, 2, kernel_size=1)
+        self.unetfinal = nn.Conv2d(nG, 3, kernel_size=1)
 
     def forward(self, input):
         task1_y0 = self.deconv1(input)
