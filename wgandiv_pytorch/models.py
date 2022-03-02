@@ -116,8 +116,8 @@ class Generator(nn.Module):
 
 
 def _gan(arch, pretrained, progress):
-    model = Generator()
-    # model = UGen_Net(100,3,1e-4)
+    # model = Generator()
+    model = UGen_Net(100,3,1e-4)
     if pretrained:
         state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
@@ -268,7 +268,7 @@ class ReconstructionDecoder(nn.Module):
         self.deconv1 = upSampleConv(nG * 8, nG * 8)
         self.conv5 = nn.Sequential(convBatch(nG * 12, nG * 4),
                                    convBatch(nG * 4, nG * 4))
-        self.deconv2 = upSampleConv(nG * 4, nG * 4)
+        self.deconv2 = upSampleConv(nG * 4, nG * 4,2)
         self.conv6 = nn.Sequential(convBatch(nG * 6, nG * 2),
                                    convBatch(nG * 2, nG * 2))
         self.deconv3 = upSampleConv(nG * 2, nG * 2)
