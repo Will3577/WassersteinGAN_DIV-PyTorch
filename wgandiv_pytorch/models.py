@@ -77,25 +77,26 @@ class Generator(nn.Module):
 
     def __init__(self):
         super(Generator, self).__init__()
-
+        dim = 64
         self.main = nn.Sequential(
-            nn.ConvTranspose2d(100, 512, 4, 1, 0, bias=False),
-            nn.BatchNorm2d(512),
+            
+            nn.ConvTranspose2d(100, 8*dim, 4, 1, 0, bias=False),
+            nn.BatchNorm2d(8*dim),
             nn.ReLU(True),
 
-            nn.ConvTranspose2d(512, 256, 4, 2, 1, bias=False),
-            nn.BatchNorm2d(256),
+            nn.ConvTranspose2d(8*dim, 4*dim, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(4*dim),
             nn.ReLU(True),
 
-            nn.ConvTranspose2d(256, 128, 4, 2, 1, bias=False),
-            nn.BatchNorm2d(128),
+            nn.ConvTranspose2d(4*dim, 2*dim, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(2*dim),
             nn.ReLU(True),
 
-            nn.ConvTranspose2d(128, 64, 4, 2, 1, bias=False),
-            nn.BatchNorm2d(64),
+            nn.ConvTranspose2d(2*dim, 1*dim, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(1*dim),
             nn.ReLU(True),
 
-            nn.ConvTranspose2d(64, 3, 4, 2, 1),
+            nn.ConvTranspose2d(1*dim, 3, 4, 2, 1),
             nn.Tanh()
         )
 
