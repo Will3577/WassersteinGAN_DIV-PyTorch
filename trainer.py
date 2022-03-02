@@ -64,6 +64,7 @@ class Trainer(object):
                                                     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
                                                 ]))
         else:
+            print(args.dataset)
             classes = [c + "_train" for c in args.classes.split(",")]
             dataset = torchvision.datasets.LSUN(root=args.data, classes=classes,
                                                 transform=transforms.Compose([
