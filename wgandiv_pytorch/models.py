@@ -248,6 +248,7 @@ class SharedEncoder(nn.Module):
         self.dropout = nn.Dropout2d(p=0.5, inplace=False)
 
     def forward(self, input):
+        print("ori_input: ",input.shape)
         input = input.float()
         x0 = self.conv0(input)
         x1 = self.conv1(x0)
@@ -256,30 +257,6 @@ class SharedEncoder(nn.Module):
         if self.has_dropout:
             result = self.dropout(result)
         return result, x0, x1, x2
-
-
-class SegmentationDecoder(nn.Module):
-    def __init__(self, nin, nout, nG=64):
-        super().__init__()
-
-        self.deconv1 = upSampleConv(nG * 8, nG * 8)
-        self.conv5 = nn.Sequential(convBatch(nG * 12, nG * 4),
-                                   convBatch(nG * 4, nG * 4))
-        self.deconv2 = upSampleConv(nG * 4, nG * 4)
-        self.conv6 = nn.Sequential(convBatch(nG * 6, nG * 2),
-                                   convBatch(nG * 2, nG * 2))
-        self.deconv3 = upSampleConv(nG * 2, nG * 2)
-        self.conv7 = nn.Sequential(convBatch(nG * 3, nG * 1),
-                                   convBatch(nG * 1, nG * 1))
-        self.unetfinal = nn.Conv2d(nG, nout, kernel_size=1)
-
-    def forward(self, input, feature_scale0, feature_scale1, feature_scale2):
-        task1_y0 = self.deconv1(input)
-        task1_y1 = self.deconv2(self.conv5(torch.cat((task1_y0, feature_scale2), dim=1)))
-        task1_y2 = self.deconv3(self.conv6(torch.cat((task1_y1, feature_scale1), dim=1)))
-        task1_y3 = self.conv7(torch.cat((task1_y2, feature_scale0), dim=1))
-        task1_result = self.unetfinal(task1_y3)
-        return task1_result
 
 
 class ReconstructionDecoder(nn.Module):
@@ -323,12 +300,13 @@ class ReconstructionDecoderWoSkip(nn.Module):
         self.unetfinal = nn.Conv2d(nG, 3, kernel_size=1)
 
     def forward(self, input):
+        print("input: ",input.shape)
         task1_y0 = self.deconv1(input)
         task1_y1 = self.deconv2(self.conv5(task1_y0))
         task1_y2 = self.deconv3(self.conv6(task1_y1))
         task1_y3 = self.conv7(task1_y2)
         task1_result = self.unetfinal(task1_y3)
         print("task1: ",task1_result.shape)
-        return torch.sigmoid(task1_result)
+        # return torch.sigmoid(task1_result)
 
-        # return torch.tanh(task1_result)
+        return torch.tanh(task1_result)
