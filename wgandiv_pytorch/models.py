@@ -201,7 +201,7 @@ class UGen_Net(nn.Module):
     def __init__(self, nin, nout, l_rate, nG=64, has_dropout=False):
         super().__init__()
         self.encoder = SharedEncoder(nin, nout, has_dropout=has_dropout).cuda()
-        self.rec_decoder = SegmentationDecoder(nin, nout).cuda()
+        self.rec_decoder = ReconstructionDecoderWoSkip(nin, nout).cuda()
 
         self.conv = nn.Conv2d(in_channels=512, out_channels=1, kernel_size=1)
 
@@ -210,8 +210,8 @@ class UGen_Net(nn.Module):
 
     def forward(self, input):
         feature, x0, x1, x2 = self.encoder(input)
-        # rec_probs = self.rec_decoder(feature)
-        rec_probs = self.rec_decoder(feature,x0,x1,x2)
+        rec_probs = self.rec_decoder(feature)
+        # rec_probs = self.rec_decoder(feature,x0,x1,x2)
 
 
         return rec_probs
