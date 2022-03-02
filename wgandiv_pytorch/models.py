@@ -306,6 +306,7 @@ class ReconstructionDecoderWoSkip(nn.Module):
         task1_y0 = self.deconv1(input)
         print("y0: ",task1_y0.shape)
         task1_y1 = self.deconv2(self.conv5(task1_y0))
+        print("y1: ",task1_y1.shape)
         task1_y2 = self.deconv3(self.conv6(task1_y1))
         task1_y3 = self.conv7(task1_y2)
         task1_result = self.unetfinal(task1_y3)
