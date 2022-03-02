@@ -80,23 +80,23 @@ class Generator(nn.Module):
         dim = 64
         self.main = nn.Sequential(
             
-            nn.ConvTranspose2d(100, 8*dim, 2, 1, 0, bias=False),
+            nn.ConvTranspose2d(100, 8*dim, 4, 1, 0, bias=False),
             nn.BatchNorm2d(8*dim),
             nn.ReLU(True),
 
-            nn.ConvTranspose2d(8*dim, 4*dim, 2, 2, 1, bias=False),
+            nn.ConvTranspose2d(8*dim, 4*dim, 4, 2, 1, bias=False),
             nn.BatchNorm2d(4*dim),
             nn.ReLU(True),
 
-            nn.ConvTranspose2d(4*dim, 2*dim, 2, 2, 1, bias=False),
+            nn.ConvTranspose2d(4*dim, 2*dim, 4, 2, 1, bias=False),
             nn.BatchNorm2d(2*dim),
             nn.ReLU(True),
 
-            nn.ConvTranspose2d(2*dim, 1*dim, 2, 2, 1, bias=False),
+            nn.ConvTranspose2d(2*dim, 1*dim, 4, 2, 1, bias=False),
             nn.BatchNorm2d(1*dim),
             nn.ReLU(True),
 
-            nn.ConvTranspose2d(1*dim, 3, 2, 2, 1),
+            nn.ConvTranspose2d(1*dim, 3, 4, 2, 1),
             nn.Tanh()
         )
 
@@ -116,8 +116,8 @@ class Generator(nn.Module):
 
 
 def _gan(arch, pretrained, progress):
-    model = Generator()
-    # model = UGen_Net(100,3,1e-4)
+    # model = Generator()
+    model = UGen_Net(100,3,1e-4)
     if pretrained:
         state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
@@ -162,7 +162,7 @@ def weights_init(m):
         m.weight.data.normal_(1.0, 0.02)
         m.bias.data.fill_(0)
 
-def convBatch(nin, nout, kernel_size=3, stride=1, padding=1, bias=False, layer=nn.Conv2d, dilation=1):
+def convBatch(nin, nout, kernel_size=6, stride=1, padding=1, bias=False, layer=nn.Conv2d, dilation=1):
     return nn.Sequential(
         layer(nin, nout, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias, dilation=dilation),
         nn.BatchNorm2d(nout),
