@@ -266,7 +266,7 @@ class SegmentationDecoder(nn.Module):
     def __init__(self, nin, nout, nG=64):
         super().__init__()
 
-        self.deconv1 = upSampleConv(nG * 8, nG * 8)
+        self.deconv1 = upSampleConv(nG * 8, nG * 12)
         self.conv5 = nn.Sequential(convBatch(nG * 12, nG * 4),
                                    convBatch(nG * 4, nG * 4))
         self.deconv2 = upSampleConv(nG * 4, nG * 4)
