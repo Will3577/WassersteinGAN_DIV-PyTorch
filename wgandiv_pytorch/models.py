@@ -338,7 +338,8 @@ class ReconstructionDecoder(nn.Module):
         task1_y2 = self.deconv3(self.conv6(torch.cat((task1_y1, feature_scale1), dim=1)))
         task1_y3 = self.conv7(torch.cat((task1_y2, feature_scale0), dim=1))
         task1_result = self.unetfinal(task1_y3)
-        return torch.sigmoid(task1_result)
+        # return torch.sigmoid(task1_result)
+        return torch.tanh(task1_result)
 
 
 class ReconstructionDecoderWoSkip(nn.Module):
@@ -362,4 +363,5 @@ class ReconstructionDecoderWoSkip(nn.Module):
         task1_y2 = self.deconv3(self.conv6(task1_y1))
         task1_y3 = self.conv7(task1_y2)
         task1_result = self.unetfinal(task1_y3)
-        return torch.sigmoid(task1_result)
+        # return torch.sigmoid(task1_result)
+        return torch.tanh(task1_result)
