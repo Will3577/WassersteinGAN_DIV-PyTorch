@@ -199,53 +199,18 @@ class UGen_Net(nn.Module):
     def __init__(self, nin, nout, l_rate, nG=64, has_dropout=False):
         super().__init__()
         self.encoder = SharedEncoder(nin, nout, has_dropout=has_dropout).cuda()
-        # self.seg_decoder = SegmentationDecoder(nin, nout).cuda()
-        # self.sdf_decoder = ReconstructionDecoder(nin, nout).cuda()
         self.rec_decoder = ReconstructionDecoderWoSkip(nin, nout).cuda()
-        # self.rec_decoder = SegmentationDecoder(nin, 9).cuda()
 
         self.conv = nn.Conv2d(in_channels=512, out_channels=1, kernel_size=1)
 
         self.encoder.apply(weights_init)
-        # self.seg_decoder.apply(weights_init)
-        # self.sdf_decoder.apply(weights_init)
         self.rec_decoder.apply(weights_init)
-
-        # optimizer = torch.optim.AdamW(self.encoder.parameters(), lr=l_rate, betas=(0.9, 0.99), amsgrad=False)
-        # optimizer1 = torch.optim.AdamW(self.seg_decoder.parameters(), lr=l_rate, betas=(0.9, 0.99), amsgrad=False)
-        # optimizer2 = torch.optim.AdamW(self.sdf_decoder.parameters(), lr=l_rate/10, betas=(0.9, 0.99), amsgrad=False)
-        # optimizer3 = torch.optim.AdamW(self.rec_decoder.parameters(), lr=l_rate/10, betas=(0.9, 0.99), amsgrad=False)
-
-        # scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.98)
-        # scheduler1 = torch.optim.lr_scheduler.ExponentialLR(optimizer1, gamma=0.98)
-        # scheduler2 = torch.optim.lr_scheduler.ExponentialLR(optimizer2, gamma=0.98)
-        # scheduler3 = torch.optim.lr_scheduler.ExponentialLR(optimizer3, gamma=0.98)
-
-        # self.optimizers = [optimizer, optimizer1, optimizer2, optimizer3]
-        # self.schedulers = [scheduler, scheduler1, scheduler2, scheduler3]
 
     def forward(self, input):
         feature, x0, x1, x2 = self.encoder(input)
-        # pred_logits = self.seg_decoder(feature, x0, x1, x2)
-        # sdf_probs = self.sdf_decoder(feature, x0, x1, x2)
         rec_probs = self.rec_decoder(feature)
-        # rec_probs = self.rec_decoder(feature, x0, x1, x2)
 
         return rec_probs
-
-
-    # def optimize(self):
-    #     for optimizer in self.optimizers:
-    #         optimizer.step()
-
-    # def zero_grad(self):
-    #     for optimizer in self.optimizers:
-    #         optimizer.zero_grad()
-
-    # def scheduler_step(self):
-    #     # for scheduler in self.schedulers:
-    #     #     scheduler.step()
-    #     pass
 
 class residualConv(nn.Module):
     def __init__(self, nin, nout):
@@ -355,7 +320,7 @@ class ReconstructionDecoderWoSkip(nn.Module):
         self.deconv3 = upSampleConv(nG * 2, nG * 2)
         self.conv7 = nn.Sequential(convBatch(nG * 2, nG * 1),
                                    convBatch(nG * 1, nG * 1))
-        self.unetfinal = nn.Conv2d(nG, 3, kernel_size=1)
+        self.unetfinal = nn.Conv2d(nG, 3, kernel_size=4)
 
     def forward(self, input):
         task1_y0 = self.deconv1(input)
