@@ -115,7 +115,7 @@ class Generator(nn.Module):
 
 def _gan(arch, pretrained, progress):
     # model = Generator()
-    model = UGen_Net()
+    model = UGen_Net(3,3,1e-4)
     if pretrained:
         state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
@@ -231,7 +231,7 @@ class UGen_Net(nn.Module):
         rec_probs = self.rec_decoder(feature)
         # rec_probs = self.rec_decoder(feature, x0, x1, x2)
 
-        return torch.flatten(feature, start_dim=1), rec_probs
+        return rec_probs
 
 
     # def optimize(self):
@@ -312,7 +312,7 @@ class ReconstructionDecoder(nn.Module):
         self.deconv3 = upSampleConv(nG * 2, nG * 2)
         self.conv7 = nn.Sequential(convBatch(nG * 3, nG * 1),
                                    convBatch(nG * 1, nG * 1))
-        self.unetfinal = nn.Conv2d(nG, 2, kernel_size=1)
+        self.unetfinal = nn.Conv2d(nG, nout, kernel_size=1)
 
     def forward(self, input, feature_scale0, feature_scale1, feature_scale2):
         task1_y0 = self.deconv1(input)
