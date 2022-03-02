@@ -102,6 +102,8 @@ class Trainer(object):
         # Parameters of pre training model.
         self.start_epoch = math.floor(args.start_iter / len(self.dataloader))
         self.epochs = math.ceil(args.iters / len(self.dataloader))
+        # self.optimizer_g = torch.optim.Adam(self.generator.parameters(), lr=args.lr, betas=(0.5, 0.999))
+        # self.optimizer_d = torch.optim.Adam(self.discriminator.parameters(), lr=args.lr, betas=(0.5, 0.999))
         self.optimizer_g = torch.optim.Adam(self.generator.parameters(), lr=args.lr, betas=(0.5, 0.999))
         self.optimizer_d = torch.optim.Adam(self.discriminator.parameters(), lr=args.lr, betas=(0.5, 0.999))
 
@@ -194,11 +196,11 @@ class Trainer(object):
                     print("saving")
                     vutils.save_image(real_images,
                                       os.path.join("output", "real_samples.png"),
-                                      normalize=False)
+                                      normalize=True)
                     fake = self.generator(fixed_noise)
                     vutils.save_image(fake.detach(),
                                       os.path.join("output", f"fake_samples_{iters}.png"),
-                                      normalize=False)
+                                      normalize=True)
 
                     # do checkpointing
                     torch.save(self.generator.state_dict(), f"weights/{args.arch}_G_iter_{iters}.pth")
