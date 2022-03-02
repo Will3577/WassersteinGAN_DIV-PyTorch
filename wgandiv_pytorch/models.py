@@ -268,7 +268,7 @@ class ReconstructionDecoder(nn.Module):
         self.deconv1 = upSampleConv(nG * 8, nG * 8)
         self.conv5 = nn.Sequential(convBatch(nG * 12, nG * 4),
                                    convBatch(nG * 4, nG * 4))
-        self.deconv2 = upSampleConv(nG * 4, nG * 4,2)
+        self.deconv2 = upSampleConv(nG * 4, nG * 4)
         self.conv6 = nn.Sequential(convBatch(nG * 6, nG * 2),
                                    convBatch(nG * 2, nG * 2))
         self.deconv3 = upSampleConv(nG * 2, nG * 2)
@@ -283,7 +283,7 @@ class ReconstructionDecoder(nn.Module):
         task1_y3 = self.conv7(torch.cat((task1_y2, feature_scale0), dim=1))
         task1_result = self.unetfinal(task1_y3)
         # return torch.sigmoid(task1_result)
-        return torch.tanh(task1_result)
+        return torch.tanh(task1_y3)
 
 
 class ReconstructionDecoderWoSkip(nn.Module):
