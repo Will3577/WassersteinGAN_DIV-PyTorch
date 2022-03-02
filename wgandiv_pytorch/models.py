@@ -284,14 +284,14 @@ class SegmentationDecoder(nn.Module):
     def forward(self, input, feature_scale0, feature_scale1, feature_scale2):
         
         task1_y0 = self.deconv1(input)
-        print("seg_y0:", task1_y0)
+        print("seg_y0:", task1_y0.shape)
         # print("seg: ",input.shape, task1_y0.shape, feature_scale0.shape, feature_scale1.shape, feature_scale2.shape)
         task1_y1 = self.deconv2(self.conv5(torch.cat((task1_y0, feature_scale2), dim=1)))
-        print("seg_y1:", task1_y1)
+        print("seg_y1:", task1_y1.shape)
         task1_y2 = self.deconv3(self.conv6(torch.cat((task1_y1, feature_scale1), dim=1)))
-        print("seg_y2:", task1_y2)
+        print("seg_y2:", task1_y2.shape)
         task1_y3 = self.conv7(torch.cat((task1_y2, feature_scale0), dim=1))
-        print("seg_y3:", task1_y3)
+        print("seg_y3:", task1_y3.shape)
         task1_result = self.unetfinal(task1_y3)
         print("seg: ",task1_result.shape, feature_scale0.shape)
         return task1_result
