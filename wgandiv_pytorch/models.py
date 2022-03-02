@@ -329,4 +329,5 @@ class ReconstructionDecoderWoSkip(nn.Module):
         task1_y3 = self.conv7(task1_y2)
         task1_result = self.unetfinal(task1_y3)
         # return torch.sigmoid(task1_result)
-        return nn.Tanh(task1_result)
+        print("task1: ",task1_result.shape)
+        return torch.tanh(task1_result)
