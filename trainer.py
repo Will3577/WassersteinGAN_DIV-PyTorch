@@ -193,11 +193,11 @@ class Trainer(object):
                 if iters % 1000 == 0:
                     vutils.save_image(real_images,
                                       os.path.join("output", "real_samples.png"),
-                                      normalize=True)
+                                      normalize=False)
                     fake = self.generator(fixed_noise)
                     vutils.save_image(fake.detach(),
                                       os.path.join("output", f"fake_samples_{iters}.png"),
-                                      normalize=True)
+                                      normalize=False)
 
                     # do checkpointing
                     torch.save(self.generator.state_dict(), f"weights/{args.arch}_G_iter_{iters}.pth")
