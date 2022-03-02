@@ -109,13 +109,15 @@ class Generator(nn.Module):
         Returns:
             A four-dimensional vector (NCHW).
         """
+        print("input: ",input.shape)
         out = self.main(input)
+        print("output: ",out.shape)
         return out
 
 
 def _gan(arch, pretrained, progress):
-    # model = Generator()
-    model = UGen_Net(100,3,1e-4)
+    model = Generator()
+    # model = UGen_Net(100,3,1e-4)
     if pretrained:
         state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
