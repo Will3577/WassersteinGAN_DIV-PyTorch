@@ -283,6 +283,7 @@ class SegmentationDecoder(nn.Module):
         task1_y2 = self.deconv3(self.conv6(torch.cat((task1_y1, feature_scale1), dim=1)))
         task1_y3 = self.conv7(torch.cat((task1_y2, feature_scale0), dim=1))
         task1_result = self.unetfinal(task1_y3)
+        print("seg: ",task1_result.shape)
         return task1_result
 # class ReconstructionDecoder(nn.Module):
 #     def __init__(self, nin, nout, nG=64):
