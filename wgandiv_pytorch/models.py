@@ -291,15 +291,15 @@ class ReconstructionDecoderWoSkip(nn.Module):
         super().__init__()
 
         self.deconv1 = upSampleConv(nG * 8, nG * 8)
-        self.conv5 = nn.Sequential(convBatch(nG * 8, nG * 4),
-                                   convBatch(nG * 4, nG * 4))
+        self.conv5 = nn.Sequential(convBatch(nG * 8, nG * 4),)
+                                #    convBatch(nG * 4, nG * 4))
         self.deconv2 = upSampleConv(nG * 4, nG * 4)
-        self.conv6 = nn.Sequential(convBatch(nG * 4, nG * 2),
-                                   convBatch(nG * 2, nG * 2))
+        self.conv6 = nn.Sequential(convBatch(nG * 4, nG * 2),)
+                                #    convBatch(nG * 2, nG * 2))
         self.deconv3 = upSampleConv(nG * 2, nG * 2)
-        self.conv7 = nn.Sequential(convBatch(nG * 2, nG * 1),
-                                   convBatch(nG * 1, nG * 1))
-        # self.unetfinal = nn.Conv2d(nG, 3, kernel_size=1)
+        self.conv7 = nn.Sequential(convBatch(nG * 2, nG * 1),)
+                                #    convBatch(nG * 1, nG * 1))
+        self.unetfinal = nn.Conv2d(nG, 3, kernel_size=1)
 
     def forward(self, input):
         print("input: ",input.shape)
@@ -307,8 +307,8 @@ class ReconstructionDecoderWoSkip(nn.Module):
         task1_y1 = self.deconv2(self.conv5(task1_y0))
         task1_y2 = self.deconv3(self.conv6(task1_y1))
         task1_y3 = self.conv7(task1_y2)
-        # task1_result = self.unetfinal(task1_y3)
-        print("task1: ",task1_y3.shape)
+        task1_result = self.unetfinal(task1_y3)
+        print("task1: ",task1_result.shape)
         # return torch.sigmoid(task1_result)
 
-        return torch.tanh(task1_y3)
+        return torch.tanh(task1_result)
