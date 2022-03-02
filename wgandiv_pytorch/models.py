@@ -162,7 +162,7 @@ def weights_init(m):
         m.weight.data.normal_(1.0, 0.02)
         m.bias.data.fill_(0)
 
-def convBatch(nin, nout, kernel_size=6, stride=1, padding=1, bias=False, layer=nn.Conv2d, dilation=1):
+def convBatch(nin, nout, kernel_size=3, stride=1, padding=1, bias=False, layer=nn.Conv2d, dilation=1):
     return nn.Sequential(
         layer(nin, nout, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias, dilation=dilation),
         nn.BatchNorm2d(nout),
@@ -291,13 +291,13 @@ class ReconstructionDecoderWoSkip(nn.Module):
         super().__init__()
 
         self.deconv1 = upSampleConv(nG * 8, nG * 8)
-        self.conv5 = nn.Sequential(convBatch(nG * 8, nG * 4),
+        self.conv5 = nn.Sequential(convBatch(nG * 12, nG * 4),
                                    convBatch(nG * 4, nG * 4))
         self.deconv2 = upSampleConv(nG * 4, nG * 4)
-        self.conv6 = nn.Sequential(convBatch(nG * 4, nG * 2),
+        self.conv6 = nn.Sequential(convBatch(nG * 6, nG * 2),
                                    convBatch(nG * 2, nG * 2))
         self.deconv3 = upSampleConv(nG * 2, nG * 2)
-        self.conv7 = nn.Sequential(convBatch(nG * 2, nG * 1),
+        self.conv7 = nn.Sequential(convBatch(nG * 3, nG * 1),
                                    convBatch(nG * 1, nG * 1))
         self.unetfinal = nn.Conv2d(nG, 3, kernel_size=1)
 
