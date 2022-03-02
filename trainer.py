@@ -74,6 +74,7 @@ class Trainer(object):
                                                     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
                                                 ]))
         self.dataloader = torch.utils.data.DataLoader(dataset,
+                                                      shuffle=True,
                                                       batch_size=args.batch_size,
                                                       pin_memory=True,
                                                       num_workers=int(args.workers))
