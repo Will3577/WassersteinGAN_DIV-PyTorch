@@ -247,7 +247,25 @@ class UGen_Net(nn.Module):
     #     #     scheduler.step()
     #     pass
 
+class residualConv(nn.Module):
+    def __init__(self, nin, nout):
+        super(residualConv, self).__init__()
+        self.convs = nn.Sequential(
+            convBatch(nin, nout),
+            nn.Conv2d(nout, nout, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(nout)
+        )
+        self.res = nn.Sequential()
+        if nin != nout:
+            self.res = nn.Sequential(
+                nn.Conv2d(nin, nout, kernel_size=1, bias=False),
+                nn.BatchNorm2d(nout)
+            )
 
+    def forward(self, input):
+        out = self.convs(input)
+        return F.leaky_relu(out + self.res(input), 0.2)
+        
 class SharedEncoder(nn.Module):
     def __init__(self, nin, nout, nG=64, has_dropout=False):
         super().__init__()
