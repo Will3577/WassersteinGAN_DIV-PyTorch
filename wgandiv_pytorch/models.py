@@ -210,7 +210,9 @@ class UGen_Net(nn.Module):
 
     def forward(self, input):
         feature, x0, x1, x2 = self.encoder(input)
-        rec_probs = self.rec_decoder(feature)
+        # rec_probs = self.rec_decoder(feature)
+        rec_probs = self.rec_decoder(feature,x0,x1,x2)
+
 
         return rec_probs
 
