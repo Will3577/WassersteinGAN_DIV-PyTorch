@@ -320,7 +320,7 @@ class ReconstructionDecoderWoSkip(nn.Module):
         self.deconv3 = upSampleConv(nG * 2, nG * 2)
         self.conv7 = nn.Sequential(convBatch(nG * 2, nG * 1),
                                    convBatch(nG * 1, nG * 1))
-        self.unetfinal = nn.Conv2d(nG, 3, kernel_size=4)
+        self.unetfinal = nn.Conv2d(nG, 3, kernel_size=1)
 
     def forward(self, input):
         task1_y0 = self.deconv1(input)
@@ -328,6 +328,7 @@ class ReconstructionDecoderWoSkip(nn.Module):
         task1_y2 = self.deconv3(self.conv6(task1_y1))
         task1_y3 = self.conv7(task1_y2)
         task1_result = self.unetfinal(task1_y3)
-        # return torch.sigmoid(task1_result)
         print("task1: ",task1_result.shape)
-        return torch.tanh(task1_result)
+        return torch.sigmoid(task1_result)
+
+        # return torch.tanh(task1_result)
