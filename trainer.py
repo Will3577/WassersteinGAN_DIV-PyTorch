@@ -156,6 +156,7 @@ class Trainer(object):
                 fake_images = self.generator(noise)
 
                 # Train with fake
+                print(fake_images.shape)
                 fake_output = self.discriminator(fake_images)
                 errD_fake = -torch.mean(fake_output)
                 D_G_z1 = fake_output.mean().item()
