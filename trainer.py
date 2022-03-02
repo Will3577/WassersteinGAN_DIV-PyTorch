@@ -96,7 +96,7 @@ class Trainer(object):
         logger.info(f"Creating discriminator model")
         self.discriminator = discriminator().to(self.device)
 
-        self.generator = self.generator.apply(weights_init)
+        # self.generator = self.generator.apply(weights_init)
         self.discriminator = self.discriminator.apply(weights_init)
 
         # Parameters of pre training model.

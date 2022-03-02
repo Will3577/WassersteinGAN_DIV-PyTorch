@@ -265,7 +265,7 @@ class residualConv(nn.Module):
     def forward(self, input):
         out = self.convs(input)
         return F.leaky_relu(out + self.res(input), 0.2)
-        
+
 class SharedEncoder(nn.Module):
     def __init__(self, nin, nout, nG=64, has_dropout=False):
         super().__init__()
