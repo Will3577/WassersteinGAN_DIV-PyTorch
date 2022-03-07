@@ -77,7 +77,7 @@ class Generator(nn.Module):
 
     def __init__(self):
         super(Generator, self).__init__()
-        dim = 64*2
+        dim = 64
         self.main = nn.Sequential(
             
             nn.ConvTranspose2d(100, 8*dim, 4, 1, 0, bias=False),

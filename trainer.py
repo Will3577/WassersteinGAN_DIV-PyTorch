@@ -139,7 +139,7 @@ class Trainer(object):
                 batch_size = real_images.size(0)
 
                 # Sample noise as generator input
-                noise = torch.randn(batch_size, 100, 1, 1, device=self.device)
+                noise = torch.randn(batch_size, 100*8, 1, 1, device=self.device)
 
                 ##############################################
                 # (1) Update D network: maximize log(D(x)) + log(1 - D(G(z)))
