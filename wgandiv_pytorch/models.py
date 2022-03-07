@@ -34,24 +34,24 @@ class Discriminator(nn.Module):
 
     def __init__(self):
         super(Discriminator, self).__init__()
-
+        nG = 64
         self.main = nn.Sequential(
-            nn.Conv2d(3, 64, 4, 2, 1, bias=False),
+            nn.Conv2d(3, 1*nG, 4, 2, 1, bias=False),
             nn.LeakyReLU(0.2, True),
 
-            nn.Conv2d(64, 128, 4, 2, 1, bias=False),
-            nn.BatchNorm2d(128),
+            nn.Conv2d(1*nG, 2*nG, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(2*nG),
             nn.LeakyReLU(0.2, True),
 
-            nn.Conv2d(128, 256, 4, 2, 1, bias=False),
-            nn.BatchNorm2d(256),
+            nn.Conv2d(2*nG, 4*nG, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(4*nG),
             nn.LeakyReLU(0.2, True),
 
-            nn.Conv2d(256, 512, 4, 2, 1, bias=False),
-            nn.BatchNorm2d(512),
+            nn.Conv2d(4*nG, 8*nG, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(8*nG),
             nn.LeakyReLU(0.2, True),
 
-            nn.Conv2d(512, 1, 4, 1, 0),
+            nn.Conv2d(8*nG, 1, 4, 1, 0),
         )
 
     def forward(self, input: torch.Tensor) -> torch.Tensor:

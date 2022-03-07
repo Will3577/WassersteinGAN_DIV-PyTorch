@@ -42,15 +42,15 @@ class Trainer(object):
 
         # Set random initialization seed, easy to reproduce.
         init_torch_seeds(args.manualSeed)
-
+        print(args.dataset)
         logger.info("Load training dataset")
         # Selection of appropriate treatment equipment.
         if args.dataset in ["imagenet", "folder", "lfw"]:
             # folder dataset
             dataset = torchvision.datasets.ImageFolder(root=args.data,
                                                        transform=transforms.Compose([
-                                                           transforms.Resize((args.image_size, args.image_size)),
-                                                           transforms.CenterCrop(args.image_size),
+                                                        #    transforms.Resize((args.image_size, args.image_size)),
+                                                        #    transforms.CenterCrop(args.image_size),
                                                            transforms.ToTensor(),
                                                            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
                                                        ]))
