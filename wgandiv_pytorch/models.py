@@ -80,7 +80,7 @@ class Generator(nn.Module):
         dim = 64
         self.main = nn.Sequential(
             
-            nn.ConvTranspose2d(100, 8*dim, 4, 1, 0, bias=False),
+            nn.ConvTranspose2d(100, 8*dim*8, 4, 1, 0, bias=False),
             nn.BatchNorm2d(8*dim),
             nn.ReLU(True),
 
