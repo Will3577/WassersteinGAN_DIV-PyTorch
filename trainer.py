@@ -42,7 +42,7 @@ class Trainer(object):
 
         # Set random initialization seed, easy to reproduce.
         init_torch_seeds(args.manualSeed)
-        print(args.dataset)
+        print(args.dataset,args.data)
         logger.info("Load training dataset")
         # Selection of appropriate treatment equipment.
         if args.dataset in ["imagenet", "folder", "lfw"]:
