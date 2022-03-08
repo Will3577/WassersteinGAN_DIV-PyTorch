@@ -103,7 +103,7 @@ class SliceDataset(Dataset):
         # Final transforms and assertions
         # assert len(images) == len(self.folders) == len(self.transforms)
         # print(len(images),len(self.folders),len(self.transforms))
-        t_tensors: List[Tensor] = [tr(e) for (tr, e) in zip(PNG_Transform, images)]
+        t_tensors: List[Tensor] = [tr(e) for (tr, e) in zip([PNG_Transform], images)]
         # print("tensors: ",t_tensors[0].shape)
 
         # main image is between 0 and 1
