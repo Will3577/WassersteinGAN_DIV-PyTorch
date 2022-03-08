@@ -157,7 +157,7 @@ class RandomResize(object):
                 pics.append(img)
 
 
-
+        print(pics[0].size)
         return tuple(pics)
 
 
