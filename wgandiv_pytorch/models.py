@@ -68,7 +68,7 @@ class Discriminator(nn.Module):
         """
         out = self.main(input)
         # print("out: ",out.shape)
-        # out = torch.flatten(out)
+        out = torch.flatten(out)
         return out
 
 
