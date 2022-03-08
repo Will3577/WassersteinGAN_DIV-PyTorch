@@ -129,7 +129,8 @@ class Trainer(object):
         # Start train PSNR model.
         logger.info(f"Training for {self.epochs} epochs")
 
-        fixed_noise = torch.randn(args.batch_size, 100, 1, 1, device=self.device)
+        # fixed_noise = torch.randn(args.batch_size, 100, 1, 1, device=self.device)
+        fixed_noise = torch.randn(args.batch_size, 512, 32, 32, device=self.device)
 
         for epoch in range(self.start_epoch, self.epochs):
             progress_bar = tqdm(enumerate(self.dataloader), total=len(self.dataloader))
@@ -139,7 +140,8 @@ class Trainer(object):
                 batch_size = real_images.size(0)
 
                 # Sample noise as generator input
-                noise = torch.randn(batch_size, 100*8, 1, 1, device=self.device)
+                # noise = torch.randn(batch_size, 100, 1, 1, device=self.device)
+                noise = torch.randn(batch_size, 512, 32, 32, device=self.device)
 
                 ##############################################
                 # (1) Update D network: maximize log(D(x)) + log(1 - D(G(z)))

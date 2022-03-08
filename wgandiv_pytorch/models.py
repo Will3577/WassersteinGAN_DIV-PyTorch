@@ -77,7 +77,7 @@ class Generator(nn.Module):
 
     def __init__(self):
         super(Generator, self).__init__()
-        dim = 64*8
+        dim = 64
         self.main = nn.Sequential(
             
             nn.ConvTranspose2d(100, 8*dim, 4, 1, 0, bias=False),
@@ -116,8 +116,8 @@ class Generator(nn.Module):
 
 
 def _gan(arch, pretrained, progress):
-    model = Generator()
-    # model = UGen_Net(100,3,1e-4)
+    # model = Generator()
+    model = UGen_Net(100,3,1e-4)
     if pretrained:
         state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
@@ -201,7 +201,8 @@ class UGen_Net(nn.Module):
     def __init__(self, nin, nout, l_rate, nG=64, has_dropout=False):
         super().__init__()
         self.encoder = SharedEncoder(nin, nout, has_dropout=has_dropout).cuda()
-        self.rec_decoder = SegmentationDecoder(nin, nout).cuda()
+        # self.rec_decoder = SegmentationDecoder(nin, nout).cuda()
+        self.rec_decoder = ReconstructionDecoderWoSkip().cuda()
 
         self.conv = nn.Conv2d(in_channels=512, out_channels=1, kernel_size=1)
 
@@ -321,7 +322,7 @@ class SegmentationDecoder(nn.Module):
 
 
 class ReconstructionDecoderWoSkip(nn.Module):
-    def __init__(self, nin, nout, nG=64):
+    def __init__(self, nG=64):
         super().__init__()
 
         self.deconv1 = upSampleConv(nG * 8, nG * 8)
