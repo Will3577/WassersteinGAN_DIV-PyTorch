@@ -53,7 +53,7 @@ class Discriminator(nn.Module):
 
             nn.Conv2d(8*nG, 1, 4, 1, 0),
             nn.Flatten(),
-            nn.Linear(1352,8)
+            nn.Linear(169,8)
         )
 
     def forward(self, input: torch.Tensor) -> torch.Tensor:
