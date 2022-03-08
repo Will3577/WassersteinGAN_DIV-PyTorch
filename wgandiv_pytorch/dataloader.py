@@ -34,7 +34,7 @@ class PNG_Transform():
     def __call__(self, img):
         # img = img.convert('L')
         img_array = np.array(img, dtype='float')
-        img_array = np.transpose(img_array,(2,0,1))[np.newaxis, ...]
+        img_array = np.transpose(img_array,(2,0,1))#[np.newaxis, ...]
         img_array /= 255
         return torch.tensor(img_array, dtype=torch.float32)
 
