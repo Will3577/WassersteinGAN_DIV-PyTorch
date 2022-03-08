@@ -42,6 +42,7 @@ class SliceDataset(Dataset):
     def __init__(self, data) -> None:
         self.filenames = os.listdir(data+'/train_256/')
         self.data_path = data+'/train_256/'
+        self.augment = True
     def __len__(self):
         return len(self.filenames)
 
