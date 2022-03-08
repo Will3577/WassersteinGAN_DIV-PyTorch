@@ -205,7 +205,7 @@ class Trainer(object):
 
                 iters = i + epoch * len(self.dataloader) + 1
                 # The image is saved every 1000 epoch.
-                if iters % 1000 == 0:
+                if iters % 100 == 0:
                     print("saving")
                     vutils.save_image(real_images,
                                       os.path.join("output", "real_samples.png"),
