@@ -151,6 +151,7 @@ class Trainer(object):
             # folder dataset
             dataset = torchvision.datasets.ImageFolder(root=args.data,
                                                        transform=transforms.Compose([
+                                                            RandomResize(),
                                                     #     #    transforms.Resize((args.image_size, args.image_size)),
                                                     #     #    transforms.CenterCrop(args.image_size),
                                                             transforms.RandomHorizontalFlip(p=0.5),
