@@ -64,6 +64,7 @@ class Discriminator(nn.Module):
             A four-dimensional vector (NCHW).
         """
         out = self.main(input)
+        print("out: ",out.shape)
         out = torch.flatten(out)
         return out
 
