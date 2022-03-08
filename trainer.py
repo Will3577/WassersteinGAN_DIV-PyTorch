@@ -245,13 +245,8 @@ class Trainer(object):
         # Selection of appropriate treatment equipment.
         if args.dataset in ["imagenet", "folder", "lfw"]:
             # folder dataset
-            data_loader = partial(DataLoader,
-                              num_workers=2,
-                              pin_memory=True)
-            dataset = data_loader(SliceDataset(args.data),
-                    batch_size=8,
-                    shuffle=True,
-                    drop_last=True)
+           
+            dataset = SliceDataset(args.data)
             # dataset = SliceDataset(args.data)
             # dataset = torchvision.datasets.ImageFolder(root=args.data,
             #                                            transform=transforms.Compose([
