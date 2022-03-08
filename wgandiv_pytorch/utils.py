@@ -39,7 +39,7 @@ def create_folder(folder):
 def calculate_gradient_penalty(real_data, fake_data, real_outputs, fake_outputs, k=2, p=6, device=torch.device("cpu")):
     real_grad_outputs = torch.full((real_data.size(0),), 1, dtype=torch.float32, requires_grad=False, device=device)
     fake_grad_outputs = torch.full((fake_data.size(0),), 1, dtype=torch.float32, requires_grad=False, device=device)
-
+    print("real_grad_outputs: ",real_grad_outputs.shape)
     real_gradient = torch.autograd.grad(
         outputs=real_outputs,
         inputs=real_data,
