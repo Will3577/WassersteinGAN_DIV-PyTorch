@@ -180,8 +180,8 @@ def augment(*arrs: Union[np.ndarray, Image.Image], rotate_angle: float = 45,
     imgs = trans(imgs)
     # trans = RandomRotation(90)
     # imgs = trans(imgs)
-    # trans = RandomResize()
-    # imgs = trans(imgs)
+    trans = RandomResize()
+    imgs = trans(imgs)
 
     # trans = RandomElasticDeform()
     # imgs = trans(imgs)
