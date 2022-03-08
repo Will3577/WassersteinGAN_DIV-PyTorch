@@ -140,7 +140,7 @@ class Trainer(object):
         for epoch in range(self.start_epoch, self.epochs):
             progress_bar = tqdm(enumerate(self.dataloader), total=len(self.dataloader))
             for i, data in progress_bar:
-                print(data.shape,data[0].shape)
+                print(len(data),data[0].shape)
                 real_images = torch.autograd.Variable(data[0].type(torch.Tensor), requires_grad=True)
                 real_images = real_images.to(self.device)
                 batch_size = real_images.size(0)
