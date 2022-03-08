@@ -62,13 +62,13 @@ class SliceDataset(Dataset):
         if self.augment:
             # augment = partial(augment,)
             image = augment(*[image])
-        print(np.array(image[0]).shape)
+        # print(np.array(image[0]).shape)
         # print(np.array(images[0]).shape)
         # Final transforms and assertions
         # assert len(images) == len(self.folders) == len(self.transforms)
         # print(len(images),len(self.folders),len(self.transforms))
         # t_tensors: List[Tensor] = [tr(e) for (tr, e) in zip([PNG_Transform], [images])]
-        t_tensors: List[Tensor] = png_transform(image)
+        t_tensors: List[Tensor] = png_transform(image[0])
 
 
         return t_tensors
