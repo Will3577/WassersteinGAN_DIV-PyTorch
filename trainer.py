@@ -37,6 +37,107 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(format="[ %(levelname)s ] %(message)s", level=logging.INFO)
 
 
+import torch
+import random
+from PIL import Image, ImageOps, ImageEnhance, ImageFilter
+import numpy as np
+import numbers
+import collections
+from skimage import morphology
+import SimpleITK as sitk
+import time
+import copy
+from skimage import io
+import albumentations as albu
+import warnings
+warnings.filterwarnings("ignore")
+class RandomResize(object):
+    """Randomly Resize the input PIL Image using a scale of lb~ub.
+    Args:
+        lb (float): lower bound of the scale
+        ub (float): upper bound of the scale
+        interpolation (int, optional): Desired interpolation. Default is
+            ``PIL.Image.BILINEAR``
+    """
+
+    def __init__(self, lb=0.8, ub=1.3, interpolation=Image.BILINEAR):
+        self.lb = lb
+        self.ub = ub
+        self.interpolation = interpolation
+
+    def __call__(self, imgs):
+        """
+        Args:
+            imgs (PIL Images): Images to be scaled.
+        Returns:
+            PIL Images: Rescaled images.
+        """
+
+        for img in imgs:
+            if not isinstance(img, Image.Image):
+                raise TypeError('img should be PIL Image. Got {}'.format(type(img)))
+
+        scale = random.uniform(self.lb, self.ub)
+        # print scale
+
+        w, h = imgs[0].size
+        ow = int(w * scale)
+        oh = int(h * scale)
+
+
+        do_albu = 1
+        if(do_albu == 1):
+            transf = albu.Resize(always_apply=False, p=1.0, height=oh, width=ow, interpolation=0)
+
+            image = np.array(imgs[0])
+            weightmap = np.expand_dims(imgs[1], axis=2)
+            label = np.array(imgs[2]) #np.expand_dims(imgs[2], axis=2)
+            if (len(label.shape) == 2):
+                label = label.reshape(label.shape[0], label.shape[1], 1)
+            if(len(image.shape)==2):
+                image = image.reshape(image.shape[0], image.shape[1], 1)
+            concat_map = np.concatenate((image, weightmap, label), axis=2)
+
+            concat_map_transf = transf(image=np.array(concat_map))['image']
+            image_channel = image.shape[-1]
+            image_transf = concat_map_transf[:, :, :image_channel]
+            image_transf = np.squeeze(image_transf)
+            weightmap_transf = concat_map_transf[:, :, image_channel]
+            if (label.shape[2] == 1):
+                #label = label.reshape(label.shape[0], label.shape[1], 1)
+                label_transf = concat_map_transf[:, :, -1:]
+                label_transf = label_transf.reshape(label_transf.shape[0], label_transf.shape[1])
+            else:
+                label_transf = concat_map_transf[:, :, -3:]
+            image_PIL = Image.fromarray(image_transf.astype(np.uint8))
+            weightmap_PIL = Image.fromarray(weightmap_transf.astype(np.uint8))
+            label_PIL = Image.fromarray(label_transf.astype(np.uint8))
+
+            pics = []
+            pics.append(image_PIL)
+            pics.append(weightmap_PIL)
+            pics.append(label_PIL)
+
+        else:
+            if scale < 1:
+                padding_l = (w - ow)//2
+                padding_t = (h - oh)//2
+                padding_r = w - ow - padding_l
+                padding_b = h - oh - padding_t
+                padding = (padding_l, padding_t, padding_r, padding_b)
+
+            pics = []
+            for i in range(len(imgs)):
+                img = imgs[i]
+                img = img.resize((ow, oh), self.interpolation)
+                if scale < 1:
+                    img = ImageOps.expand(img, border=padding, fill=0)
+                pics.append(img)
+
+
+
+        return tuple(pics)
+
 class Trainer(object):
     def __init__(self, args):
         self.args = args
@@ -52,8 +153,8 @@ class Trainer(object):
                                                        transform=transforms.Compose([
                                                     #     #    transforms.Resize((args.image_size, args.image_size)),
                                                     #     #    transforms.CenterCrop(args.image_size),
-                                                    #         transforms.RandomHorizontalFlip(p=0.5),
-                                                    #         transforms.RandomVerticalFlip(p=0.5),
+                                                            transforms.RandomHorizontalFlip(p=0.5),
+                                                            transforms.RandomVerticalFlip(p=0.5),
 
                                                             transforms.ToTensor(),
                                                             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
