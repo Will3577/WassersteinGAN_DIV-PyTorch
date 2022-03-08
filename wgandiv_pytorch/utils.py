@@ -134,6 +134,8 @@ def weights_init(m):
 from torch import Tensor
 from PIL import Image, ImageOps
 from typing import Any, Callable, Iterable, List, Set, Tuple, TypeVar, Union
+from transforms import *
+
 A = TypeVar("A")
 B = TypeVar("B")
 T = TypeVar("T", Tensor, np.ndarray)
@@ -170,8 +172,8 @@ def augment(*arrs: Union[np.ndarray, Image.Image], rotate_angle: float = 45,
     
     # trans = RandomChooseAug()
     # imgs = trans(imgs)
-    # trans = RandomColor()
-    # imgs = trans(imgs)
+    trans = RandomColor()
+    imgs = trans(imgs)
     trans = RandomHorizontalFlip()
     imgs = trans(imgs)
     # trans = RandomAffine()
