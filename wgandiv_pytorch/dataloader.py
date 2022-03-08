@@ -68,7 +68,7 @@ class SliceDataset(Dataset):
         # assert len(images) == len(self.folders) == len(self.transforms)
         # print(len(images),len(self.folders),len(self.transforms))
         # t_tensors: List[Tensor] = [tr(e) for (tr, e) in zip([PNG_Transform], [images])]
-        t_tensors: List[Tensor] = png_transform(image[0])
+        t_tensors: List[Tensor] = [png_transform(image[0])]
 
 
         return t_tensors
