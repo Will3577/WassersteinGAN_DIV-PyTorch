@@ -211,6 +211,6 @@ class Trainer(object):
                     # do checkpointing
                     torch.save(self.generator.state_dict(), f"weights/{args.arch}_G_iter_{iters}.pth")
                     torch.save(self.discriminator.state_dict(), f"weights/{args.arch}_D_iter_{iters}.pth")
-
+                    print("end saving")
                 if iters == int(args.iters):  # If the iteration is reached, exit.
                     break
