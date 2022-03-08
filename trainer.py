@@ -79,7 +79,7 @@ class PNG_Transform():
 class SliceDataset(Dataset):
     def __init__(self, data,) -> None:
         self.filenames = os.listdir(data+'/train_256/')
-    
+        self.data_path = data+'/train_256/'
     def __len__(self):
         return len(self.filenames)
 
@@ -88,7 +88,7 @@ class SliceDataset(Dataset):
         # path_name: Path = Path(filename)
         # images: List[D]
 
-        images = Image.open(self.filenames[index])
+        images = Image.open(self.data_path+self.filenames[index])
         # if path_name.suffix == ".png":
         #     images = [Image.open(files[index]) for files in self.files]
         # elif path_name.suffix == ".npy":
