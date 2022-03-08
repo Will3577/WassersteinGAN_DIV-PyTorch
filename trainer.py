@@ -198,7 +198,7 @@ class Trainer(object):
 
                 iters = i + epoch * len(self.dataloader) + 1
                 # The image is saved every 1000 epoch.
-                if iters % 100 == 0:
+                if iters % 10 == 0:
                     print("saving")
                     vutils.save_image(real_images,
                                       os.path.join("output", "real_samples.png"),
@@ -211,6 +211,6 @@ class Trainer(object):
                     # do checkpointing
                     torch.save(self.generator.state_dict(), f"weights/{args.arch}_G_iter_{iters}.pth")
                     torch.save(self.discriminator.state_dict(), f"weights/{args.arch}_D_iter_{iters}.pth")
-                    print("end saving")
+                    # print("end saving")
                 if iters == int(args.iters):  # If the iteration is reached, exit.
                     break
