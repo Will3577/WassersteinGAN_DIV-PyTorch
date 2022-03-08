@@ -62,7 +62,7 @@ class SliceDataset(Dataset):
         if self.augment:
             # augment = partial(augment,)
             image = augment(*[image])
-        print(len(image))
+        print(np.array(image).shape)
         # print(np.array(images[0]).shape)
         # Final transforms and assertions
         # assert len(images) == len(self.folders) == len(self.transforms)
