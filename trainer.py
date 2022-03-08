@@ -37,6 +37,97 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(format="[ %(levelname)s ] %(message)s", level=logging.INFO)
 
 
+
+import io
+import re
+import random
+from operator import itemgetter
+from pathlib import Path
+from itertools import repeat
+from functools import partial
+from typing import Any, Callable, BinaryIO, Dict, List, Match, Pattern, Tuple, Union, Optional
+
+import torch
+import numpy as np
+from torch import Tensor
+from PIL import Image
+from torchvision import transforms
+# from skimage.transform import resize
+from torch.utils.data import Dataset, DataLoader, Sampler
+
+# from utils.utils import id_, map_, class2one_hot
+# from utils.utils import simplex, sset, one_hot, depth, augment
+# from utils.my_transforms import PNG_Transform, GT_Transform, DUMMY_Transfrom
+
+F = Union[Path, BinaryIO]
+D = Union[Image.Image, np.ndarray, Tensor]
+
+
+# resizing_fn = partial(resize, mode="constant", preserve_range=True, anti_aliasing=False)
+class PNG_Transform():
+    def __init__(self):
+        
+        pass
+
+    def __call__(self, img):
+        # img = img.convert('L')
+        img_array = np.array(img, dtype='float')#[np.newaxis, ...]
+        img_array = np.transpose(img_array,(2,0,1))
+        img_array /= 255
+        return torch.tensor(img_array, dtype=torch.float32)
+
+class SliceDataset(Dataset):
+    def __init__(self, data,) -> None:
+        self.filenames = os.listdir(data+'/train_256/')
+
+    def __getitem__(self, index: int) -> List[Any]:
+        filename: str = self.filenames[index]
+        # path_name: Path = Path(filename)
+        # images: List[D]
+
+        images = Image.open(self.filenames[index])
+        # if path_name.suffix == ".png":
+        #     images = [Image.open(files[index]) for files in self.files]
+        # elif path_name.suffix == ".npy":
+        #     images = [np.load(files[index]) for files in self.files]
+        # else:
+        #     raise ValueError(filename)
+
+        # if self.augment:
+            # augment = partial(augment,)
+            # images = augment(*images)
+        # print(np.array(images[0]).shape)
+        # Final transforms and assertions
+        # assert len(images) == len(self.folders) == len(self.transforms)
+        # print(len(images),len(self.folders),len(self.transforms))
+        t_tensors: List[Tensor] = [tr(e) for (tr, e) in zip(PNG_Transform, images)]
+        # print("tensors: ",t_tensors[0].shape)
+
+        # main image is between 0 and 1
+        # if not self.ignore_norm:
+        #     assert 0 <= t_tensors[0].min() and t_tensors[0].max() <= 1, (t_tensors[0].min(), t_tensors[0].max())
+        # print(t_tensors[0].shape,t_tensors[1].shape)
+        # _, w, h = t_tensors[0].shape
+        # for ttensor in t_tensors[1:]:  # Things should be one-hot or at least have the shape
+        #     # print(ttensor.shape,(self.C, w, h), (ttensor.shape, self.C, w, h))
+        #     # print(len(t_tensors))
+        #     assert ttensor.shape == (self.C, w, h), (ttensor.shape, self.C, w, h,t_tensors[1].shape,t_tensors[2].shape)
+
+        # for ttensor, is_hot in zip(t_tensors, self.are_hots):  # All masks (ground truths) are class encoded
+        #     if is_hot:
+        #         assert one_hot(ttensor, axis=0), torch.einsum("cwh->wh", ttensor)
+
+        # img, gt = t_tensors[:2]
+        # print(img.shape, gt.shape, img.type(), gt.type())
+
+        return t_tensors
+
+
+
+
+
+
+
 import torch
 import random
 from PIL import Image, ImageOps, ImageEnhance, ImageFilter
@@ -149,18 +240,19 @@ class Trainer(object):
         # Selection of appropriate treatment equipment.
         if args.dataset in ["imagenet", "folder", "lfw"]:
             # folder dataset
-            dataset = torchvision.datasets.ImageFolder(root=args.data,
-                                                       transform=transforms.Compose([
-                                                            RandomResize(),
-                                                    #     #    transforms.Resize((args.image_size, args.image_size)),
-                                                    #     #    transforms.CenterCrop(args.image_size),
-                                                            transforms.RandomHorizontalFlip(p=0.5),
-                                                            transforms.RandomVerticalFlip(p=0.5),
+            dataset = SliceDataset(args.data)
+            # dataset = torchvision.datasets.ImageFolder(root=args.data,
+            #                                            transform=transforms.Compose([
+            #                                                 RandomResize(),
+            #                                         #     #    transforms.Resize((args.image_size, args.image_size)),
+            #                                         #     #    transforms.CenterCrop(args.image_size),
+            #                                                 transforms.RandomHorizontalFlip(p=0.5),
+            #                                                 transforms.RandomVerticalFlip(p=0.5),
 
-                                                            transforms.ToTensor(),
-                                                            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-                                                       ])
-                                                       )
+            #                                                 transforms.ToTensor(),
+            #                                                 transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+            #                                            ])
+            #                                            )
         elif args.dataset == "lsun":
             classes = [c + "_train" for c in args.classes.split(",")]
             dataset = torchvision.datasets.LSUN(root=args.data, classes=classes,
