@@ -54,7 +54,7 @@ class Discriminator(nn.Module):
             nn.Conv2d(8*nG, 1, 4, 1, 0),
             nn.Flatten(),
             nn.Linear(169,1),
-            nn.Sigmoid()
+            # nn.Sigmoid()
         )
 
     def forward(self, input: torch.Tensor) -> torch.Tensor:
