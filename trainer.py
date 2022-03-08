@@ -42,7 +42,7 @@ class Trainer(object):
 
         # Set random initialization seed, easy to reproduce.
         init_torch_seeds(args.manualSeed)
-        print(args.dataset,args.data)
+        # print(args.dataset,args.data)
         logger.info("Load training dataset")
         # Selection of appropriate treatment equipment.
         if args.dataset in ["imagenet", "folder", "lfw"]:
@@ -64,7 +64,7 @@ class Trainer(object):
                                                     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
                                                 ]))
         else:
-            print(args.dataset)
+            # print(args.dataset)
             classes = [c + "_train" for c in args.classes.split(",")]
             dataset = torchvision.datasets.LSUN(root=args.data, classes=classes,
                                                 transform=transforms.Compose([
@@ -158,7 +158,7 @@ class Trainer(object):
                 fake_images = self.generator(noise)
 
                 # Train with fake
-                print(fake_images.shape)
+                # print(fake_images.shape)
                 fake_output = self.discriminator(fake_images)
                 errD_fake = -torch.mean(fake_output)
                 D_G_z1 = fake_output.mean().item()

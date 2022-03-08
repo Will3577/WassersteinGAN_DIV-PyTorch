@@ -341,15 +341,15 @@ class ReconstructionDecoderWoSkip(nn.Module):
         self.unetfinal = nn.Conv2d(nG, 3, kernel_size=1)
 
     def forward(self, input):
-        print("input: ",input.shape)
+        # print("input: ",input.shape)
         task1_y0 = self.deconv1(input)
-        print("y0: ",task1_y0.shape)
+        # print("y0: ",task1_y0.shape)
         task1_y1 = self.deconv2(self.conv5(task1_y0))
-        print("y1: ",task1_y1.shape)
+        # print("y1: ",task1_y1.shape)
         task1_y2 = self.deconv3(self.conv6(task1_y1))
         task1_y3 = self.conv7(task1_y2)
         task1_result = self.unetfinal(task1_y3)
-        print("task1: ",task1_result.shape)
+        # print("task1: ",task1_result.shape)
         # return torch.sigmoid(task1_result)
 
         return torch.tanh(task1_result)
