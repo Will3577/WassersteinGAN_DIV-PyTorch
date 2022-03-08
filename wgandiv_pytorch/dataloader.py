@@ -15,7 +15,7 @@ from PIL import Image
 from torchvision import transforms
 # from skimage.transform import resize
 from torch.utils.data import Dataset, DataLoader, Sampler
-from utils import augment
+from wgandiv_pytorch.utils import augment
 
 # from utils.utils import id_, map_, class2one_hot
 # from utils.utils import simplex, sset, one_hot, depth, augment

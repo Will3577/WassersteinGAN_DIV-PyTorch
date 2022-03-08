@@ -134,7 +134,7 @@ def weights_init(m):
 from torch import Tensor
 from PIL import Image, ImageOps
 from typing import Any, Callable, Iterable, List, Set, Tuple, TypeVar, Union
-from transforms import *
+from wgandiv_pytorch.transforms import *
 
 A = TypeVar("A")
 B = TypeVar("B")
