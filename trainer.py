@@ -27,6 +27,7 @@ from wgandiv_pytorch import discriminator
 from wgandiv_pytorch import init_torch_seeds
 from wgandiv_pytorch import select_device
 from wgandiv_pytorch import weights_init
+from wgandiv_pytorch.utils import *
 
 model_names = sorted(name for name in models.__dict__
                      if name.islower() and not name.startswith("__")
@@ -48,15 +49,16 @@ class Trainer(object):
         if args.dataset in ["imagenet", "folder", "lfw"]:
             # folder dataset
             dataset = torchvision.datasets.ImageFolder(root=args.data,
-                                                       transform=transforms.Compose([
-                                                        #    transforms.Resize((args.image_size, args.image_size)),
-                                                        #    transforms.CenterCrop(args.image_size),
-                                                            transforms.RandomHorizontalFlip(p=0.5),
-                                                            transforms.RandomVerticalFlip(p=0.5),
+                                                    #    transform=transforms.Compose([
+                                                    #     #    transforms.Resize((args.image_size, args.image_size)),
+                                                    #     #    transforms.CenterCrop(args.image_size),
+                                                    #         transforms.RandomHorizontalFlip(p=0.5),
+                                                    #         transforms.RandomVerticalFlip(p=0.5),
 
-                                                            transforms.ToTensor(),
-                                                            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-                                                       ]))
+                                                    #         transforms.ToTensor(),
+                                                    #         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+                                                    #    ])
+                                                       )
         elif args.dataset == "lsun":
             classes = [c + "_train" for c in args.classes.split(",")]
             dataset = torchvision.datasets.LSUN(root=args.data, classes=classes,
@@ -138,6 +140,7 @@ class Trainer(object):
         for epoch in range(self.start_epoch, self.epochs):
             progress_bar = tqdm(enumerate(self.dataloader), total=len(self.dataloader))
             for i, data in progress_bar:
+                print(data.shape,data[0].shape)
                 real_images = torch.autograd.Variable(data[0].type(torch.Tensor), requires_grad=True)
                 real_images = real_images.to(self.device)
                 batch_size = real_images.size(0)

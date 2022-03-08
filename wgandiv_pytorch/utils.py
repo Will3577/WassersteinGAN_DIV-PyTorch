@@ -130,3 +130,64 @@ def weights_init(m):
     elif classname.find("BatchNorm") != -1:
         torch.nn.init.normal_(m.weight, 1.0, 0.02)
         torch.nn.init.zeros_(m.bias)
+
+from torch import Tensor
+from PIL import Image, ImageOps
+from typing import Any, Callable, Iterable, List, Set, Tuple, TypeVar, Union
+A = TypeVar("A")
+B = TypeVar("B")
+T = TypeVar("T", Tensor, np.ndarray)
+
+def map_(fn: Callable[[A], B], iter: Iterable[A]) -> List[B]:
+    return list(map(fn, iter))
+
+def augment(*arrs: Union[np.ndarray, Image.Image], rotate_angle: float = 45,
+            flip: bool = True, mirror: bool = True,
+            rotate: bool = True, scale: bool = False, crop=(256,256),
+            norm_rate=(1,0),hard_rate=(0,0.5)) -> List[Image.Image]:
+    assert norm_rate[0]+hard_rate[0]==1.0
+    imgs: List[Image.Image] = map_(Image.fromarray, arrs) if isinstance(arrs[0], np.ndarray) else list(arrs)
+
+    # i, j, h, w = T.RandomCrop.get_params(imgs[0], (64,64))
+    # for idx in range(len(imgs)):
+    #     imgs[idx] = F.crop(imgs[idx], i, j, h, w)
+
+    # rand_num = random()
+    # img = np.array(imgs[0])
+    # mask = np.array(imgs[1])
+    # foreground = remove_by_label(img,mask,255)
+    # background = remove_by_label(img,mask,0)
+    # if rand_num<easy_rate[0]:
+
+    #     imgs[0] = Image.fromarray(cv2.addWeighted(foreground,1,background,easy_rate[1],0))
+    # if rand_num<hard_rate[0]:
+    #     fore_rgb = get_rgb(foreground)
+    #     background = changeColor(background,fore_rgb,np.ones(3)*0.5)
+    #     imgs[0] = Image.fromarray((foreground+background).astype(np.uint8))
+    
+    # if flip and random() > 0.5:
+    #     imgs = map_(ImageOps.flip, imgs)
+    
+    # trans = RandomChooseAug()
+    # imgs = trans(imgs)
+    # trans = RandomColor()
+    # imgs = trans(imgs)
+    trans = RandomHorizontalFlip()
+    imgs = trans(imgs)
+    # trans = RandomAffine()
+    # imgs = trans(imgs)
+    # trans = RandomRotation(90)
+    # imgs = trans(imgs)
+    # trans = RandomResize()
+    # imgs = trans(imgs)
+
+    # trans = RandomElasticDeform()
+    # imgs = trans(imgs)
+    # trans = RandomCrop(256)
+    # imgs = trans(imgs)
+    # trans =
+
+    # trans =
+
+
+    return imgs
