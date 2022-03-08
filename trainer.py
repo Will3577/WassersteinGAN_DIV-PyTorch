@@ -77,7 +77,7 @@ class PNG_Transform():
         return torch.tensor(img_array, dtype=torch.float32)
 
 class SliceDataset(Dataset):
-    def __init__(self, data,) -> None:
+    def __init__(self, data) -> None:
         self.filenames = os.listdir(data+'/train_256/')
         self.data_path = data+'/train_256/'
     def __len__(self):
@@ -245,7 +245,14 @@ class Trainer(object):
         # Selection of appropriate treatment equipment.
         if args.dataset in ["imagenet", "folder", "lfw"]:
             # folder dataset
-            dataset = SliceDataset(args.data)
+            data_loader = partial(DataLoader,
+                              num_workers=2,
+                              pin_memory=True)
+            dataset = data_loader(SliceDataset(args.data),
+                    batch_size=8,
+                    shuffle=True,
+                    drop_last=True)
+            # dataset = SliceDataset(args.data)
             # dataset = torchvision.datasets.ImageFolder(root=args.data,
             #                                            transform=transforms.Compose([
             #                                                 RandomResize(),
