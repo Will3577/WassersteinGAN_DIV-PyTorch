@@ -79,6 +79,9 @@ class PNG_Transform():
 class SliceDataset(Dataset):
     def __init__(self, data,) -> None:
         self.filenames = os.listdir(data+'/train_256/')
+    
+    def __len__(self):
+        return len(self.filenames)
 
     def __getitem__(self, index: int) -> List[Any]:
         filename: str = self.filenames[index]
