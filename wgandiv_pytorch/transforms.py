@@ -153,11 +153,12 @@ class RandomResize(object):
                     # img = np.array(img)
                     img = cv2.copyMakeBorder(np.array(img),padding_t,padding_b,padding_l,padding_r,cv2.BORDER_REFLECT)
                     Image.fromarray(img)
+                    print(img.size)
                     # img = ImageOps.expand(img, border=padding , fill=0)
                 pics.append(img)
 
 
-        print(pics[0].size)
+        # print(pics[0].size)
         return tuple(pics)
 
 
