@@ -152,6 +152,7 @@ class RandomResize(object):
                 if scale < 1:
                     # img = np.array(img)
                     img = cv2.copyMakeBorder(np.array(img),padding_t,padding_b,padding_l,padding_r,cv2.BORDER_REFLECT)
+                    print(img.shape)
                     Image.fromarray(img)
                     print(img.size)
                     # img = ImageOps.expand(img, border=padding , fill=0)
