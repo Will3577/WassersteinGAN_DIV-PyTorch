@@ -58,7 +58,7 @@ class SliceDataset(Dataset):
         #     images = [np.load(files[index]) for files in self.files]
         # else:
         #     raise ValueError(filename)
-        print(image.size)
+        # print(image.size)
         if self.augment:
             # augment = partial(augment,)
             image = augment(*[image])
