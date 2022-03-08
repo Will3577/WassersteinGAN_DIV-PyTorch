@@ -167,7 +167,7 @@ class Trainer(object):
                 # Generate fake image batch with G
                 fake_images = self.generator(noise)
 
-                print(fake_images.shape)
+                print(fake_images.shape,torch.amax(fake_images))
 
                 # Train with fake
                 # print(fake_images.shape)
