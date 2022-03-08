@@ -24,17 +24,17 @@ class Compose(object):
         transforms (list of ``Transform`` objects): list of transforms to compose.
     """
 
-    def __init__(self, transforms, selectorNameList):
+    def __init__(self, transforms):
         self.transforms = transforms
-        self.selectorNameList = selectorNameList
+        # self.selectorNameList = selectorNameList
     def __call__(self, imgs):
-        number = 0
+        # number = 0
         for t in self.transforms:
             #selectorName = str(self.selectorNameList[number])
             #start_time = time.time()
             imgs = t(imgs)
 
-            number = number + 1
+            # number = number + 1
         return imgs
 
 
