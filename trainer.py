@@ -167,6 +167,8 @@ class Trainer(object):
                 # Generate fake image batch with G
                 fake_images = self.generator(noise)
 
+                print(fake_images.shape)
+
                 # Train with fake
                 # print(fake_images.shape)
                 fake_output = self.discriminator(fake_images)
