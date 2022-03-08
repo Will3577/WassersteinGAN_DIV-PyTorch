@@ -69,7 +69,7 @@ class Scale(object):
         return tuple(pics)
 
 
-
+import cv2
 class RandomResize(object):
     """Randomly Resize the input PIL Image using a scale of lb~ub.
     Args:
@@ -104,7 +104,7 @@ class RandomResize(object):
         oh = int(h * scale)
 
 
-        do_albu = 1
+        do_albu = 0 # TODO                                                
         if(do_albu == 1):
             transf = albu.Resize(always_apply=False, p=1.0, height=oh, width=ow, interpolation=0)
 
@@ -150,7 +150,9 @@ class RandomResize(object):
                 img = imgs[i]
                 img = img.resize((ow, oh), self.interpolation)
                 if scale < 1:
-                    img = ImageOps.expand(img, border=padding, fill=0)
+                    img = cv2.copyMakeBorder(img,padding_t,padding_b,padding_l,padding_r,cv2.BORDER_REFLECT)
+
+                    # img = ImageOps.expand(img, border=padding, fill=0)
                 pics.append(img)
 
 

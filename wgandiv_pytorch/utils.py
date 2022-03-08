@@ -173,7 +173,7 @@ def augment(*arrs: Union[np.ndarray, Image.Image], rotate_angle: float = 45,
     # trans = RandomChooseAug()
     # imgs = trans(imgs)
 
-    trans = Compose([RandomColor(),RandomHorizontalFlip(),RandomVerticalFlip(),RandomAffine(0.3)])
+    trans = Compose([RandomColor(),RandomHorizontalFlip(),RandomVerticalFlip(),RandomResize(),RandomAffine(0.3)])
     imgs = trans(imgs)
     # trans = RandomColor()
     # imgs = trans(imgs)
