@@ -53,7 +53,8 @@ class Discriminator(nn.Module):
 
             nn.Conv2d(8*nG, 1, 4, 1, 0),
             nn.Flatten(),
-            nn.Linear(169,1)
+            nn.Linear(169,1),
+            nn.Sigmoid()
         )
 
     def forward(self, input: torch.Tensor) -> torch.Tensor:
@@ -66,8 +67,8 @@ class Discriminator(nn.Module):
             A four-dimensional vector (NCHW).
         """
         out = self.main(input)
-        print("out: ",out.shape)
-        out = torch.flatten(out)
+        # print("out: ",out.shape)
+        # out = torch.flatten(out)
         return out
 
 
@@ -352,3 +353,50 @@ class ReconstructionDecoderWoSkip(nn.Module):
         # return torch.sigmoid(task1_result)
 
         return torch.tanh(task1_result)
+
+
+
+class Discriminator_old(nn.Module):
+    r""" An Discriminator model.
+
+    `Generative Adversarial Networks model architecture from the One weird trick...
+    <https://arxiv.org/abs/1704.00028v3>`_ paper.
+    """
+
+    def __init__(self):
+        super(Discriminator, self).__init__()
+        nG = 64
+        self.main = nn.Sequential(
+            nn.Conv2d(3, 1*nG, 4, 2, 1, bias=False),
+            nn.LeakyReLU(0.2, True),
+
+            nn.Conv2d(1*nG, 2*nG, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(2*nG),
+            nn.LeakyReLU(0.2, True),
+
+            nn.Conv2d(2*nG, 4*nG, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(4*nG),
+            nn.LeakyReLU(0.2, True),
+
+            nn.Conv2d(4*nG, 8*nG, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(8*nG),
+            nn.LeakyReLU(0.2, True),
+
+            nn.Conv2d(8*nG, 1, 4, 1, 0),
+            # nn.Flatten(),
+            # nn.Linear(169,1)
+        )
+
+    def forward(self, input: torch.Tensor) -> torch.Tensor:
+        r""" Defines the computation performed at every call.
+
+        Args:
+            input (tensor): input tensor into the calculation.
+
+        Returns:
+            A four-dimensional vector (NCHW).
+        """
+        out = self.main(input)
+        # print("out: ",out.shape)
+        out = torch.flatten(out)
+        return out
