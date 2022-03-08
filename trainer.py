@@ -87,7 +87,7 @@ class SliceDataset(Dataset):
         filename: str = self.filenames[index]
         # path_name: Path = Path(filename)
         # images: List[D]
-
+        png_transform = PNG_Transform()
         images = Image.open(self.data_path+self.filenames[index])
         # if path_name.suffix == ".png":
         #     images = [Image.open(files[index]) for files in self.files]
@@ -104,7 +104,7 @@ class SliceDataset(Dataset):
         # assert len(images) == len(self.folders) == len(self.transforms)
         # print(len(images),len(self.folders),len(self.transforms))
         # t_tensors: List[Tensor] = [tr(e) for (tr, e) in zip([PNG_Transform], [images])]
-        t_tensors: List[Tensor] = [PNG_Transform(images)]
+        t_tensors: List[Tensor] = [png_transform(images)]
 
         # print("tensors: ",t_tensors[0].shape)
 
