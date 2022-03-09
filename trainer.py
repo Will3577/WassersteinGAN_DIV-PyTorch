@@ -167,12 +167,13 @@ class Trainer(object):
 
                 # Generate fake image batch with G
                 fake_images = self.generator(noise)
-                fake_images = fake_images.cpu().detach().numpy()
-                fake_images = np.transpose(fake_images,(0,2,3,1))
-                fake_images = augment(*fake_images)
-                fake_images = np.transpose(fake_images, (0,3,1,2))
-                fake_images = torch.Tensor(fake_images).to(self.device)
-
+                # fake_images = fake_images.cpu().detach().numpy()
+                # fake_images = np.transpose(fake_images,(0,2,3,1))
+                # fake_images = augment(*fake_images)
+                # fake_images = np.transpose(fake_images, (0,3,1,2))
+                # fake_images = torch.Tensor(fake_images).to(self.device)
+                hflipper = transforms.RandomHorizontalFlip(p=0.5)
+                fake_images = hflipper(fake_images)
                 print(fake_images.shape,torch.amax(fake_images))
 
                 # Train with fake
