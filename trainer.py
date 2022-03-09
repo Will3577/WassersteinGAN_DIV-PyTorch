@@ -167,7 +167,7 @@ class Trainer(object):
 
                 # Generate fake image batch with G
                 fake_images = self.generator(noise)
-                fake_images = fake_images.detach().numpy()
+                fake_images = fake_images.cpu().detach().numpy()
                 fake_images = np.transpose(fake_images,(0,2,3,1))
                 fake_images = augment(*fake_images)
                 fake_images = np.transpose(fake_images, (0,3,1,2))
