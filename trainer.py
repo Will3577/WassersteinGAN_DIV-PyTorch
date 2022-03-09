@@ -148,7 +148,7 @@ class Trainer(object):
                     transforms.RandomHorizontalFlip(p=0.5),
                     transforms.RandomVerticalFlip(p=0.5),
                     transforms.RandomResizedCrop(256,scale=(0.75,1)),
-                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+                    # transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
         
                 ])
         for epoch in range(self.start_epoch, self.epochs):
