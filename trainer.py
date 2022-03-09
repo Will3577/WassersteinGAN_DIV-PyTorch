@@ -148,6 +148,7 @@ class Trainer(object):
                     transforms.RandomHorizontalFlip(p=0.5),
                     transforms.RandomVerticalFlip(p=0.5),
                     transforms.RandomResizedCrop(256,scale=(0.75,1)),
+                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
         
                 ])
         for epoch in range(self.start_epoch, self.epochs):
@@ -212,6 +213,7 @@ class Trainer(object):
                     self.generator.zero_grad()
                     # Generate fake image batch with G
                     fake_images = self.generator(noise)
+                    fake_images = transform(fake_images)
                     fake_output = self.discriminator(fake_images)
                     errG = torch.mean(fake_output)
                     D_G_z2 = fake_output.mean().item()
