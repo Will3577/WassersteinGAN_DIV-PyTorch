@@ -20,6 +20,7 @@ import torchvision.datasets
 import torchvision.transforms as transforms
 import torchvision.utils as vutils
 from tqdm import tqdm
+import numpy as np
 
 import wgandiv_pytorch.models as models
 from wgandiv_pytorch import calculate_gradient_penalty
@@ -27,7 +28,7 @@ from wgandiv_pytorch import discriminator
 from wgandiv_pytorch import init_torch_seeds
 from wgandiv_pytorch import select_device
 from wgandiv_pytorch import weights_init
-from wgandiv_pytorch.utils import *
+from wgandiv_pytorch.utils import augment
 from wgandiv_pytorch.dataloader import SliceDataset
 
 model_names = sorted(name for name in models.__dict__
@@ -166,6 +167,11 @@ class Trainer(object):
 
                 # Generate fake image batch with G
                 fake_images = self.generator(noise)
+                fake_images = fake_images.detach().numpy()
+                fake_images = np.transpose(fake_images,(0,2,3,1))
+                fake_images = augment(*fake_images)
+                fake_images = np.transpose(fake_images, (0,3,1,2))
+                fake_images = torch.Tensor(fake_images).to(self.device)
 
                 print(fake_images.shape,torch.amax(fake_images))
 
