@@ -185,7 +185,7 @@ class Trainer(object):
                 # hflipper = transforms.RandomHorizontalFlip(p=0.5)
                 # fake_images = hflipper(fake_images)
                 fake_images = transform(fake_images)
-                print(fake_images.shape,torch.amax(fake_images))
+                # print(fake_images.shape,torch.amax(fake_images))
 
                 # Train with fake
                 # print(fake_images.shape)
