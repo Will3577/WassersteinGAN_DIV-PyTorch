@@ -59,8 +59,7 @@ class Trainer(object):
                                                     #     #    transforms.CenterCrop(args.image_size),
                                                             transforms.RandomHorizontalFlip(p=0.5),
                                                             transforms.RandomVerticalFlip(p=0.5),
-                                                            transforms.RandomResizedCrop(256),
-
+                                                            transforms.RandomResizedCrop(256,scale=(0.75,1)),
                                                             transforms.ToTensor(),
                                                             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
                                                        ])
@@ -142,7 +141,15 @@ class Trainer(object):
 
         # fixed_noise = torch.randn(args.batch_size, 100, 1, 1, device=self.device)
         fixed_noise = torch.randn(args.batch_size, 512, 32, 32, device=self.device)
-
+        transform = transforms.Compose([
+                    # RandomResize(),
+            #     #    transforms.Resize((args.image_size, args.image_size)),
+            #     #    transforms.CenterCrop(args.image_size),
+                    transforms.RandomHorizontalFlip(p=0.5),
+                    transforms.RandomVerticalFlip(p=0.5),
+                    transforms.RandomResizedCrop(256,scale=(0.75,1)),
+        
+                ])
         for epoch in range(self.start_epoch, self.epochs):
             progress_bar = tqdm(enumerate(self.dataloader), total=len(self.dataloader))
             for i, data in progress_bar:
@@ -162,6 +169,7 @@ class Trainer(object):
                 self.discriminator.zero_grad()
 
                 # Train with real
+                real_images = transform(real_images)
                 real_output = self.discriminator(real_images)
                 errD_real = torch.mean(real_output)
                 D_x = real_output.mean().item()
@@ -173,8 +181,9 @@ class Trainer(object):
                 # fake_images = augment(*fake_images)
                 # fake_images = np.transpose(fake_images, (0,3,1,2))
                 # fake_images = torch.Tensor(fake_images).to(self.device)
-                hflipper = transforms.RandomHorizontalFlip(p=0.5)
-                fake_images = hflipper(fake_images)
+                # hflipper = transforms.RandomHorizontalFlip(p=0.5)
+                # fake_images = hflipper(fake_images)
+                fake_images = transform(fake_images)
                 print(fake_images.shape,torch.amax(fake_images))
 
                 # Train with fake
